@@ -1,14 +1,5 @@
-# Use a lightweight JDK image
-FROM eclipse-temurin:21-jdk-jammy
-
-# Set the working directory
+FROM eclipse-temurin:21
 WORKDIR /app
-
-# Copy the source code into the container
-COPY Hello.java .
-
-# Compile the java file
+COPY . /app
 RUN javac Hello.java
-
-# Run the application
 CMD ["java", "Hello"]
