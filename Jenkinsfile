@@ -2,56 +2,43 @@ pipeline {
     agent any
 
     environment {
-        // Ensure this ID matches what you saved in Jenkins Credentials Provider
-        DOCKERHUB_CREDENTIALS = 'crampy'
-        IMAGE_NAME = 'samruddhics/new_docker_image'
+        DOCKERHUB_CREDENTIALS = 'Docker-credentials'//give your credential name
+        IMAGE_NAME = 'shilpakevala/new_docker_image'//give your image name
     }
 
     stages {
-        stage('1. Clean Workspace') {
+
+        stage('Build Java Application') {
             steps {
-                deleteDir()
+                bat 'javac HelloWorld.java'
             }
         }
 
-        stage('2. Checkout') {
+        stage('Run Java Program') {
             steps {
-                checkout scm
+                bat 'java HelloWorld'
             }
         }
 
-        stage('3. Compile Java') {
-            steps {
-                // Verifies the code compiles before we try to build an image
-                bat 'javac Hello.java'
-            }
-        }
-
-        stage('4. Unit Test') {
-            steps {
-                // Verifies the program runs as expected
-                bat 'java Hello'
-            }
-        }
-
-        stage('5. Build Docker Image') {
+        stage('Build Docker Image') {
             steps {
                 bat 'docker build -t %IMAGE_NAME%:latest .'
             }
         }
 
-        stage('6. DockerHub Login') {
+        stage('Login to DockerHub') {
             steps {
                 withCredentials([usernamePassword(
-                    credentialsId: "${DOCKERHUB_CREDENTIALS}",
-                    usernameVariable: 'USER',
-                    passwordVariable: 'PASS')]) {
-                        bat 'echo %PASS% | docker login -u %USER% --password-stdin'
+                credentialsId: 'Docker-credentials',//give your credentials mentioned above
+                usernameVariable: 'USER',
+                passwordVariable: 'PASS')]) {
+
+                    bat 'echo %PASS%| docker login -u %USER% --password-stdin'
                 }
             }
         }
 
-        stage('7. Push to Registry') {
+        stage('Push Docker Image') {
             steps {
                 bat 'docker push %IMAGE_NAME%:latest'
             }
