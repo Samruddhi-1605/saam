@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        DOCKERHUB_CREDENTIALS = 'crampy'//give your credential name
+        DOCKERHUB_CREDENTIALS = 'docker-hub-creds'//give your credential name
         IMAGE_NAME = 'samruddhics/myapp1'//give your image name
     }
 
@@ -29,7 +29,7 @@ pipeline {
         stage('Login to DockerHub') {
             steps {
                 withCredentials([usernamePassword(
-                credentialsId: 'crampy',//give your credentials mentioned above
+                credentialsId: 'docker-hub-creds',//give your credentials mentioned above
                 usernameVariable: 'USER',
                 passwordVariable: 'PASS')]) {
 
