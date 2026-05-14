@@ -3,7 +3,7 @@ pipeline {
 
     environment {
         DOCKERHUB_CREDENTIALS = 'crampy'//give your credential name
-        IMAGE_NAME = 'samruddhics/app1'//give your image name
+        IMAGE_NAME = 'samruddhics/myapp1'//give your image name
     }
 
     stages {
